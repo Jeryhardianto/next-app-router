@@ -9,11 +9,21 @@ type Product = {
   title: string;
   price: number;
   image: string;
-}
+};
 
 async function getData() {
   // const res = await fetch("https://fakestoreapi.com/products");
-  const res = await fetch("http://localhost:3000/api/product");
+  const res = await fetch("http://localhost:3000/api/product", {
+    cache: "no-cache",
+    // Revalidate every 30 seconds
+    // next: {
+    //   revalidate: 30,
+    // },
+    // Revalidate with tags
+    next: {
+        tags: ["products"],
+    },
+  });
 
   if (!res.ok) {
     throw new Error("Something went wrong");
@@ -34,9 +44,10 @@ export default async function ProductPage(props: ProductPageProps) {
       </h1> */}
       {products.data.length > 0 &&
         products.data.map((product: Product) => (
-          <div 
+          <div
             key={product.id}
-            className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+            className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+          >
             <a href="#">
               <img
                 className="p-8 rounded-t-lg object-cover h-96 w-full"
