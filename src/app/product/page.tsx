@@ -24,7 +24,7 @@ export default async function ProductPage(props: ProductPageProps) {
         products.data.map((product: Product) => (
           <div
             key={product.id}
-            className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+            className="w-11/12 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
           >
             <Link href={`/product/detail/${product.id}`}>
               <img
@@ -40,7 +40,7 @@ export default async function ProductPage(props: ProductPageProps) {
                 </h5>
               </Link>
               <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                <span className="text-xl font-bold text-gray-900 dark:text-white">
                   $ {product.price}
                 </span>
                 <Button
