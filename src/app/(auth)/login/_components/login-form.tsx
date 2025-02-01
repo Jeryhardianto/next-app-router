@@ -11,20 +11,31 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { signIn } from "next-auth/react"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const { push } = useRouter()
+  const handleLogin = async (e: any) => {
     e.preventDefault()
-    fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: e.currentTarget.email.value,
-        password: e.currentTarget.password.value,
-      }),
-    })
+    try{
+      const res = await signIn("credentials", {
+        email: e.target.email.value,
+        password: e.target.password.value,
+        redirect: false,
+        callbackUrl: "/dashboard",
+      })
+      if(!res?.error){
+        push("/dashboard")
+      }else{
+        console.log(res.error)
+      }
+    }catch(err){
+      console.log(err)
+    }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

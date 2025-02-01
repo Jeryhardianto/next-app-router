@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "./navbar";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,13 +19,15 @@ const geistMono = Geist_Mono({
 
 const disableNavbar = ["/login", "/register"];
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+type RootLayoutProps = Readonly<{
   children: React.ReactNode;
-}>) {
+}>;
+
+export default function RootLayout({
+  children
+}: RootLayoutProps) {
   const pathname = usePathname();
-  const app_name = process.env.NEXT_PUBLIC_APP_NAME || "";
+  const app_name = process.env.NEXT_PUBLIC_APP_NAME ?? "Next.js App";
   useEffect(() => {
     const titles: { [key: string]: string } = {
       "/": `Home | ${app_name}`,
@@ -41,8 +44,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {!disableNavbar.includes(pathname) && <Navbar />}
-        {children}
+        <SessionProvider>
+          {!disableNavbar.includes(pathname) && <Navbar />}
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );
