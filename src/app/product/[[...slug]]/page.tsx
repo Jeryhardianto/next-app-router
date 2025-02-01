@@ -12,7 +12,7 @@ type Product = {
 };
 
 async function getData() {
-  const res = await fetch("https://fakestoreapi.com/products");
+  const res = await fetch("https://fakestoreapi.com/productss");
   // const res = await fetch("http://localhost:3000/api/product", {
   //   cache: "no-cache",
   //   // Revalidate every 30 seconds
