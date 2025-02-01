@@ -12,18 +12,18 @@ type Product = {
 };
 
 async function getData() {
-  // const res = await fetch("https://fakestoreapi.com/products");
-  const res = await fetch("http://localhost:3000/api/product", {
-    cache: "no-cache",
-    // Revalidate every 30 seconds
-    // next: {
-    //   revalidate: 30,
-    // },
-    // Revalidate with tags
-    next: {
-        tags: ["products"],
-    },
-  });
+  const res = await fetch("https://fakestoreapi.com/products");
+  // const res = await fetch("http://localhost:3000/api/product", {
+  //   cache: "no-cache",
+  //   // Revalidate every 30 seconds
+  //   // next: {
+  //   //   revalidate: 30,
+  //   // },
+  //   // Revalidate with tags
+  //   next: {
+  //       tags: ["products"],
+  //   },
+  // });
 
   if (!res.ok) {
     throw new Error("Something went wrong");
@@ -34,7 +34,8 @@ async function getData() {
 
 export default async function ProductPage(props: ProductPageProps) {
   const { params } = props;
-
+  // implement delay loading
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   const products = await getData();
 
   return (
@@ -42,8 +43,8 @@ export default async function ProductPage(props: ProductPageProps) {
       {/* <h1 className="text-2xl">
         {params.slug ? "Detail Product Page" : "Product Page"}
       </h1> */}
-      {products.data.length > 0 &&
-        products.data.map((product: Product) => (
+      {products.length > 0 &&
+        products.map((product: Product) => (
           <div
             key={product.id}
             className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
