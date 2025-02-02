@@ -13,7 +13,7 @@ export function RegisterForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   const { push } = useRouter();
-  const [ error, setError ] = useState("");
+  const [error, setError] = useState("");
   const [IsLoading, setLoading] = useState(false);
 
   const handleSubmit = async (e: any) => {
@@ -76,8 +76,10 @@ export function RegisterForm({
                 </div>
                 <Input id="password" type="password" placeholder="*******" />
               </div>
-              <Button type="submit" className="w-full">
-                Register
+              <Button disabled={IsLoading} type="submit" className="w-full">
+                {
+                  IsLoading ? "Loading..." : "Sign up"
+                }
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
