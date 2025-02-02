@@ -15,10 +15,16 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 
+type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
+  className?: string;
+  searchParams?: any;
+};
+
 export function LoginForm({
+  searchParams,
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: LoginFormProps) {
   const { push } = useRouter();
   const [IsLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,13 +38,12 @@ export function LoginForm({
         email: e.target.email.value,
         password: e.target.password.value,
         redirect: false,
-        callbackUrl: "/dashboard",
+        callbackUrl: searchParams,
       });
-      console.log(res);
       if (!res?.error) {
         e.target.reset();
         setLoading(false);
-        push("/dashboard");
+        push(searchParams);
       } else {
         setLoading(false);
         if (res.status === 401) {

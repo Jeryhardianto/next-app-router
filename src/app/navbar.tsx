@@ -2,11 +2,10 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const pathname = usePathname();
-  // const router = useRouter();
   const { data: session, status }: { data: any; status: string } = useSession();
 
   return (
@@ -20,6 +19,14 @@ export default function Navbar() {
           } cursor-pointer`}
         >
           Home
+        </Link>
+        <Link
+          href="/dashboard"
+          className={`${
+            pathname === "/dashboard" ? "text-yellow-300" : ""
+          } cursor-pointer`}
+        >
+          Dashboard
         </Link>
         <Link
           href="/product"
@@ -38,9 +45,9 @@ export default function Navbar() {
           About
         </Link>
         <Link
-          href="/about/profile"
+          href="/profile"
           className={`${
-            pathname === "/about/profile" ? "text-yellow-300" : ""
+            pathname === "/profile" ? "text-yellow-300" : ""
           } cursor-pointer`}
         >
           Profile
