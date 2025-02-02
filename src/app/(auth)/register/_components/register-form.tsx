@@ -44,7 +44,7 @@ export function RegisterForm({
         <CardHeader>
           <CardTitle className="text-2xl">Register</CardTitle>
           {error && (
-            <div className="bg-red-500 p-4 rounded text-white font-bold">
+            <div className="bg-red-500 text-sm p-4 rounded text-white">
               {error}
             </div>
           )}
@@ -77,9 +77,7 @@ export function RegisterForm({
                 <Input id="password" type="password" placeholder="*******" />
               </div>
               <Button disabled={IsLoading} type="submit" className="w-full">
-                {
-                  IsLoading ? "Loading..." : "Sign up"
-                }
+                {IsLoading ? "Loading..." : "Sign up"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

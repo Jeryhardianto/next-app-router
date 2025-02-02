@@ -1,42 +1,54 @@
-"use client"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+"use client";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { signIn } from "next-auth/react"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useState } from "react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  const { push } = useRouter()
+  const { push } = useRouter();
+  const [IsLoading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleLogin = async (e: any) => {
-    e.preventDefault()
-    try{
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError("");
       const res = await signIn("credentials", {
         email: e.target.email.value,
         password: e.target.password.value,
         redirect: false,
         callbackUrl: "/dashboard",
-      })
-      if(!res?.error){
-        push("/dashboard")
-      }else{
-        console.log(res.error)
+      });
+      console.log(res);
+      if (!res?.error) {
+        e.target.reset();
+        setLoading(false);
+        push("/dashboard");
+      } else {
+        setLoading(false);
+        if (res.status === 401) {
+          setError("Email or password is incorrect");
+        }
       }
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
-  }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -45,18 +57,18 @@ export function LoginForm({
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
+          {error && (
+            <div className="bg-red-500 text-sm p-4 rounded text-white">
+              {error}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <form onSubmit={(e) => handleLogin(e)}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  
-                />
+                <Input id="email" type="email" placeholder="m@example.com" />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -70,8 +82,8 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" placeholder="*******" />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" disabled={IsLoading} className="w-full">
+                {IsLoading ? "Loading..." : "Sign in"}
               </Button>
               {/* <Button variant="outline" className="w-full">
                 Login with Google
@@ -80,12 +92,12 @@ export function LoginForm({
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
               <Link href="/register" className="underline underline-offset-4">
-                  Sign up
+                Sign up
               </Link>
             </div>
           </form>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
