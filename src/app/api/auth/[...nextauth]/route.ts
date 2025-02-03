@@ -1,8 +1,9 @@
 import NextAuth from "next-auth/next";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { login } from "@/lib/firebase/service";
+import { login, loginWithGoogle } from "@/lib/firebase/service";
 import { compare } from "bcrypt";
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -34,6 +35,10 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_OAUTH_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET ?? "",
+    }),
   ],
   callbacks: {
     async jwt({ token, account, profile, user }: any) {
@@ -42,6 +47,23 @@ export const authOptions: NextAuthOptions = {
         token.fullname = user.fullname;
         token.role = user.role;
       }
+
+      if (account?.provider === "google") {
+        const data = {
+          email: profile.email,
+          fullname: profile.name,
+          type: "google",
+        };
+
+        await loginWithGoogle(data, (res: any) => {
+          if (res.status) {
+            token.email = res.data.email;
+            token.fullname = res.data.fullname;
+            token.role = res.data.role;
+          }
+        });
+      }
+
       return token;
     },
     async session({ session, token }: any) {

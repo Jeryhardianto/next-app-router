@@ -17,11 +17,11 @@ import { useState } from "react";
 
 type LoginFormProps = React.ComponentPropsWithoutRef<"div"> & {
   className?: string;
-  searchParams?: any;
+  callbackUrl?: any;
 };
 
 export function LoginForm({
-  searchParams,
+  callbackUrl,
   className,
   ...props
 }: LoginFormProps) {
@@ -38,12 +38,12 @@ export function LoginForm({
         email: e.target.email.value,
         password: e.target.password.value,
         redirect: false,
-        callbackUrl: searchParams,
+        callbackUrl: callbackUrl,
       });
       if (!res?.error) {
         e.target.reset();
         setLoading(false);
-        push(searchParams);
+        push(callbackUrl);
       } else {
         setLoading(false);
         if (res.status === 401) {
@@ -90,9 +90,19 @@ export function LoginForm({
               <Button type="submit" disabled={IsLoading} className="w-full">
                 {IsLoading ? "Loading..." : "Sign in"}
               </Button>
-              {/* <Button variant="outline" className="w-full">
+              <Button
+                type="button"
+                onClick={() =>
+                  signIn("google", {
+                    callbackUrl,
+                    redirect: false,
+                  })
+                }
+                variant="outline"
+                className="w-full"
+              >
                 Login with Google
-              </Button> */}
+              </Button>
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
