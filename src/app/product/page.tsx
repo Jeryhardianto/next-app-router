@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { getProduct } from "@/services/products";
+import Image from "next/image";
 import Link from "next/link";
 
 type ProductPageProps = Readonly<{
@@ -17,7 +18,7 @@ type Product = {
 
 export default async function ProductPage(props: ProductPageProps) {
   const { params } = props;
-  const products = await getProduct("http://localhost:3000/api/product");
+  const products = await getProduct("http://localhost:3001/api/product");
   return (
     <div className="grid grid-cols-4 mt-5 mx-5 place-items-center gap-3">
       {products.data.length > 0 &&
@@ -27,10 +28,12 @@ export default async function ProductPage(props: ProductPageProps) {
             className="w-11/12 max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
           >
             <Link href={`/product/detail/${product.id}`}>
-              <img
+              <Image
                 className="p-8 rounded-t-lg object-cover h-96 w-full"
                 src={product.image}
                 alt={product.title}
+                width={400}
+                height={400}
               />
             </Link>
             <div className="px-5 pb-5">

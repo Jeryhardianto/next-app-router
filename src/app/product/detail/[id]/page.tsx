@@ -4,7 +4,7 @@ import { getProduct } from "@/services/products";
 export default async function DetailProductPage(props: any) {
   const { params } = props;
   const product = await getProduct(
-    "http://localhost:3000/api/product/?id=" + params.id
+    "http://localhost:3001/api/product/?id=" + params.id
   );
   return (
     <div className="container mx-auto my-10">

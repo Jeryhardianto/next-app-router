@@ -1,15 +1,16 @@
 import { Modal } from "@/app/product/_components/modal";
 import { Button } from "@/components/ui/button";
 import { getProduct } from "@/services/products";
+import Image from "next/image";
 
 export default async function DetailProductPage(props: any) {
   const { params } = props;
   const product = await getProduct(
-    "http://localhost:3000/api/product/?id=" + params.id
+    "http://localhost:3001/api/product/?id=" + params.id
   );
   return (
     <Modal>
-      <img
+      <Image
         className="w-screen object-cover aspect-square col-span-2"
         src={product.data.image}
         alt={product.data.title}
